@@ -1,30 +1,30 @@
-// controllers/bfhlController.js
-exports.postData = (req, res) => {
+exports.getOperationCode = (req, res) => {
+    res.status(200).json({ "operation_code": 1 });
+};
+
+exports.processData = (req, res) => {
     const { data } = req.body;
-    const user_id = "your_fullname_ddmmyyyy"; 
-    const email = "your_college_email";
-    const roll_number = "your_roll_number";
 
     if (!data || !Array.isArray(data)) {
-        return res.status(400).json({ "is_success": false, "error": "Invalid Input" });
+        return res.status(400).json({
+            "is_success": false,
+            "message": "Invalid input format"
+        });
     }
 
     const numbers = data.filter(item => !isNaN(item));
-    const alphabets = data.filter(item => /^[a-zA-Z]$/.test(item));
-    const highest_alphabet = alphabets.length ? [alphabets.sort().reverse()[0].toUpperCase()] : [];
+    const alphabets = data.filter(item => /^[A-Za-z]$/.test(item));
+    const highest_alphabet = alphabets.length > 0 
+        ? [alphabets.sort((a, b) => b.localeCompare(a, undefined, { sensitivity: 'base' }))[0]] 
+        : [];
 
-    res.status(200).json({
+    res.json({
         "is_success": true,
-        "user_id": user_id,
-        "email": email,
-        "roll_number": roll_number,
+        "user_id": "uditkuma09052004",
+        "email": "udit@cgc.com",  
+        "roll_number": "2121395",
         "numbers": numbers,
         "alphabets": alphabets,
         "highest_alphabet": highest_alphabet
     });
 };
-
-exports.getOperationCode = (req, res) => {
-    res.status(200).json({ "operation_code": 1 });
-};
-
